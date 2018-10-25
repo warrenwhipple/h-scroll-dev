@@ -3,8 +3,8 @@ import './App.css';
 import HScroll from './HScroll';
 import HScrollWindow from './HScrollWindow';
 
-const cardHeight = 75
-const cardWidth = 100
+const cardHeight = 100
+const cardWidth = 150
 
 const Card = ({ index, style }) => (
   <div style={style} className="card">
@@ -30,6 +30,8 @@ class App extends Component {
         <HScroll>{cards}</HScroll>
         <h1>showScrollbar</h1>
         <HScroll showScrollbar>{cards}</HScroll>
+        <h1>scrollSnap</h1>
+        <HScroll scrollSnap>{cards}</HScroll>
         <h1>window</h1>
         <HScrollWindow height={cardHeight} itemCount={1000} itemSize={cardWidth} >{Card}</HScrollWindow>
       </div>
