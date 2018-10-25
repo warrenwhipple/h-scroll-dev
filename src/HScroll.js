@@ -3,7 +3,7 @@ import React from 'react';
 const HScroll = props => {
   const { hideScrollbar } = props;
   const outerStyle = {
-    overflowY: 'hidden',
+    overflowY: hideScrollbar ? 'hidden' : null,
   };
   const innerStyle = {
     display: 'flex',

@@ -1,34 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-// import { FixedSizeList as List } from 'react-window';
-// import ResizeDetector from 'react-resize-detector';
 import HScroll from './HScroll';
+import HScrollWindow from './HScrollWindow';
 
-// const Card = ({ index, style }) => (
-//   <div style={style} className="card">
-//     Card {index}
-//   </div>
-// );
+const cardHeight = 75
+const cardWidth = 100
 
-// const Example = () => (
-//   <ResizeDetector handleWidth>
-//     {width => (
-//       <div>
-//         <List
-//           direction="horizontal"
-//           height={75}
-//           itemCount={1000}
-//           itemSize={100}
-//           width={width ? width : 0}
-//         >
-//           {Card}
-//         </List>
-//       </div>
-//     )}
-//   </ResizeDetector>
-// );
+const Card = ({ index, style }) => (
+  <div style={style} className="card">
+    Card {index}
+  </div>
+);
 
-const cardStyle = { width: 100, height: 75, flexShrink: 0 };
+const cardStyle = { width: cardWidth, height: cardHeight, flexShrink: 0 };
 
 const cards = [...Array(20).keys()].map(key => {
   return (
@@ -48,6 +32,8 @@ class App extends Component {
         <HScroll>{cards}</HScroll>
         <h1>hideScrollbar</h1>
         <HScroll hideScrollbar>{cards}</HScroll>
+        <h1>window</h1>
+        <HScrollWindow height={cardHeight} itemCount={1000} itemSize={cardWidth} >{Card}</HScrollWindow>
       </div>
     );
   }
