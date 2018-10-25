@@ -1,16 +1,16 @@
 import React from 'react';
 
 const HScroll = props => {
-  const { hideScrollbar } = props;
+  const { showScrollbar } = props;
   const outerStyle = {
-    overflowY: hideScrollbar ? 'hidden' : null,
+    overflowY: showScrollbar ? 'hidden' : null,
   };
   const innerStyle = {
     display: 'flex',
     overflowX: 'scroll',
     WebkitOverflowScrolling: 'touch',
-    paddingBottom: hideScrollbar ? 20 : null,
-    marginBottom: hideScrollbar ? -20 : null,
+    paddingBottom: showScrollbar ? 20 : null,
+    marginBottom: showScrollbar ? -20 : null,
   };
   return (
     <div style={outerStyle}>

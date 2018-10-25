@@ -26,12 +26,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <h1>react-window</h1>
-        <Example /> */}
         <h1>vanilla</h1>
         <HScroll>{cards}</HScroll>
-        <h1>hideScrollbar</h1>
-        <HScroll hideScrollbar>{cards}</HScroll>
+        <h1>showScrollbar</h1>
+        <HScroll showScrollbar>{cards}</HScroll>
         <h1>window</h1>
         <HScrollWindow height={cardHeight} itemCount={1000} itemSize={cardWidth} >{Card}</HScrollWindow>
       </div>
