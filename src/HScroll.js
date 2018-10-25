@@ -20,7 +20,7 @@ const HScrollInner = props => {
     itemWidth,
     width,
     height,
-    // gap = 0,
+    gap = 10,
     showScrollbar,
     scrollSnap,
     children,
@@ -28,11 +28,12 @@ const HScrollInner = props => {
 
   if (isNaN(width)) return null;
 
-  const itemsPerPage = Math.floor((width * 1.0) / itemWidth);
-  const spaceLeft = width - itemsPerPage * itemWidth;
-  const gapValue = spaceLeft / (itemsPerPage + 3.0);
-  const itemStart = gapValue * 2.0;
-  const itemSpacing = itemWidth + gapValue;
+  const shortWidth = width - gap * 3;
+  const itemsPerPage = Math.floor(shortWidth * 1.0 / (itemWidth + gap));
+  const spaceLeft = shortWidth - itemsPerPage * (itemWidth + gap);
+  const grownGap = spaceLeft * 1.0 / (itemsPerPage + 3) + gap;
+  const itemStart = grownGap * 2.0;
+  const itemSpacing = itemWidth + grownGap;
 
   const style = {
     height,
