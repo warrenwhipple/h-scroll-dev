@@ -32,6 +32,10 @@ class App extends Component {
         <HScroll showScrollbar>{cards}</HScroll>
         <h1>scrollSnap</h1>
         <HScroll scrollSnap>{cards}</HScroll>
+        <h1>gap=0</h1>
+        <HScroll gap={0}>{cards}</HScroll>
+        <h1>gap=20</h1>
+        <HScroll gap={20}>{cards}</HScroll>
         <h1>window</h1>
         <HScrollWindow
           height={cardHeight}
