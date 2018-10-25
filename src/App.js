@@ -3,12 +3,12 @@ import './App.css';
 import HScroll from './HScroll';
 import HScrollWindow from './HScrollWindow';
 
-const cardHeight = 100
-const cardWidth = 150
+const cardHeight = 100;
+const cardWidth = 150;
 
 const Card = ({ index, style }) => (
   <div style={style} className="card">
-    Card {index}
+    {index}
   </div>
 );
 
@@ -17,7 +17,7 @@ const cardStyle = { width: cardWidth, height: cardHeight, flexShrink: 0 };
 const cards = [...Array(20).keys()].map(key => {
   return (
     <div key={key} className="card" style={cardStyle}>
-      Card {key}
+      {key}
     </div>
   );
 });
@@ -33,7 +33,13 @@ class App extends Component {
         <h1>scrollSnap</h1>
         <HScroll scrollSnap>{cards}</HScroll>
         <h1>window</h1>
-        <HScrollWindow height={cardHeight} itemCount={1000} itemSize={cardWidth} >{Card}</HScrollWindow>
+        <HScrollWindow
+          height={cardHeight}
+          itemCount={1000}
+          itemSize={cardWidth}
+        >
+          {Card}
+        </HScrollWindow>
       </div>
     );
   }
