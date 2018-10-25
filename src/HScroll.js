@@ -16,7 +16,23 @@ const WrappedItem = props => {
 };
 
 const HScrollInner = props => {
-  const { itemWidth, height, gap = 0, showScrollbar, scrollSnap, children } = props;
+  const {
+    itemWidth,
+    width,
+    height,
+    // gap = 0,
+    showScrollbar,
+    scrollSnap,
+    children,
+  } = props;
+
+  if (isNaN(width)) return null;
+
+  const itemsPerPage = Math.floor((width * 1.0) / itemWidth);
+  const spaceLeft = width - itemsPerPage * itemWidth;
+  const gapValue = spaceLeft / (itemsPerPage + 3.0);
+  const itemStart = gapValue * 2.0;
+  const itemSpacing = itemWidth + gapValue;
 
   const style = {
     height,
@@ -26,14 +42,13 @@ const HScrollInner = props => {
     paddingBottom: showScrollbar ? null : 20,
     marginBottom: showScrollbar ? null : -20,
     scrollSnapType: scrollSnap ? 'x mandatory' : null,
+    scrollPaddingLeft: scrollSnap ? itemStart : null,
   };
-
-  const itemSpacing = itemWidth + gap;
 
   const wrappedItems = children.map((child, index) => (
     <WrappedItem
       key={index}
-      offset={itemSpacing * index}
+      offset={itemStart + itemSpacing * index}
       width={itemWidth}
       scrollSnap={scrollSnap}
     >
@@ -44,8 +59,8 @@ const HScrollInner = props => {
   return <div style={style}>{wrappedItems}</div>;
 };
 
-const HScroll = props => {
-  const { height, itemWidth, gap, showScrollbar, scrollSnap, children } = props;
+const HScrollOuter = props => {
+  const { height, showScrollbar } = props;
 
   const style = {
     height: height,
@@ -53,22 +68,16 @@ const HScroll = props => {
   };
 
   return (
-    <ResizeDetector handleWidth>
-      {width => (
-        <div style={style}>
-          <HScrollInner
-            itemWidth={itemWidth}
-            height={height}
-            gap={gap}
-            showScrollbar={showScrollbar}
-            scrollSnap={scrollSnap}
-          >
-            {children}
-          </HScrollInner>
-        </div>
-      )}
-    </ResizeDetector>
+    <div style={style}>
+      <HScrollInner {...props} />
+    </div>
   );
 };
+
+const HScroll = props => (
+  <ResizeDetector handleWidth>
+    {width => <HScrollOuter width={width} {...props} />}
+  </ResizeDetector>
+);
 
 export default HScroll;
