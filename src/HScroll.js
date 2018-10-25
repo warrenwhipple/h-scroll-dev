@@ -1,11 +1,14 @@
 import React from 'react';
 import ResizeDetector from 'react-resize-detector';
 
-const ItemWrapper = props => {
-  const { width, scrollSnap, children } = props;
+const WrappedItem = props => {
+  const { offset, width, height, scrollSnap, children } = props;
 
   const style = {
+    position: 'absolute',
+    left: offset,
     width,
+    height,
     scrollSnapAlign: scrollSnap ? 'start' : null,
   };
 
@@ -13,10 +16,11 @@ const ItemWrapper = props => {
 };
 
 const HScrollInner = props => {
-  const { itemWidth, gap, showScrollbar, scrollSnap, children } = props;
+  const { itemWidth, height, gap = 0, showScrollbar, scrollSnap, children } = props;
 
   const style = {
-    display: 'flex',
+    height,
+    position: 'relative',
     overflowX: 'scroll',
     WebkitOverflowScrolling: 'touch',
     paddingBottom: showScrollbar ? null : 20,
@@ -24,21 +28,27 @@ const HScrollInner = props => {
     scrollSnapType: scrollSnap ? 'x mandatory' : null,
   };
 
-  const itemWrapperWidth = itemWidth + gap;
+  const itemSpacing = itemWidth + gap;
 
-  const wrappedChildren = children.map((child, index) => (
-    <ItemWrapper key={index} width={itemWrapperWidth} scrollSnap={scrollSnap}>
+  const wrappedItems = children.map((child, index) => (
+    <WrappedItem
+      key={index}
+      offset={itemSpacing * index}
+      width={itemWidth}
+      scrollSnap={scrollSnap}
+    >
       {child}
-    </ItemWrapper>
+    </WrappedItem>
   ));
 
-  return <div style={style}>{wrappedChildren}</div>;
+  return <div style={style}>{wrappedItems}</div>;
 };
 
 const HScroll = props => {
-  const { showScrollbar, scrollSnap, itemWidth, gap, children } = props;
+  const { height, itemWidth, gap, showScrollbar, scrollSnap, children } = props;
 
   const style = {
+    height: height,
     overflowY: showScrollbar ? null : 'hidden',
   };
 
@@ -47,10 +57,11 @@ const HScroll = props => {
       {width => (
         <div style={style}>
           <HScrollInner
+            itemWidth={itemWidth}
+            height={height}
+            gap={gap}
             showScrollbar={showScrollbar}
             scrollSnap={scrollSnap}
-            itemWidth={itemWidth}
-            gap={gap}
           >
             {children}
           </HScrollInner>

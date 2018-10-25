@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import HScroll from './HScroll';
-import HScrollWindow from './HScrollWindow';
 
 const cardHeight = 100;
 const cardWidth = 150;
-
-const Card = ({ index, style }) => (
-  <div style={style} className="card">
-    {index}
-  </div>
-);
 
 const cardStyle = { width: cardWidth, height: cardHeight, flexShrink: 0 };
 
@@ -27,23 +20,13 @@ class App extends Component {
     return (
       <div className="App">
         <h1>vanilla</h1>
-        <HScroll>{cards}</HScroll>
+        <HScroll height={cardHeight} itemWidth={cardWidth}>{cards}</HScroll>
         <h1>showScrollbar</h1>
-        <HScroll showScrollbar>{cards}</HScroll>
+        <HScroll height={cardHeight} itemWidth={cardWidth} showScrollbar>{cards}</HScroll>
         <h1>scrollSnap</h1>
-        <HScroll scrollSnap>{cards}</HScroll>
-        <h1>gap=0</h1>
-        <HScroll gap={0}>{cards}</HScroll>
-        <h1>gap=20</h1>
-        <HScroll gap={20}>{cards}</HScroll>
-        <h1>window</h1>
-        <HScrollWindow
-          height={cardHeight}
-          itemCount={1000}
-          itemSize={cardWidth}
-        >
-          {Card}
-        </HScrollWindow>
+        <HScroll height={cardHeight} itemWidth={cardWidth} scrollSnap>{cards}</HScroll>
+        <h1>gap=10</h1>
+        <HScroll height={cardHeight} itemWidth={cardWidth} gap={10}>{cards}</HScroll>
       </div>
     );
   }
