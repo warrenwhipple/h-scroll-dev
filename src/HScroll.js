@@ -1,15 +1,21 @@
 import React from 'react';
+import ResizeDetector from 'react-resize-detector';
 
-const defaultGap = 10;
+const ItemWrapper = props => {
+  const { width, scrollSnap, children } = props;
 
-const HScroll = props => {
-  const { showScrollbar, scrollSnap, gap, children } = props;
-
-  const outerStyle = {
-    overflowY: showScrollbar ? null : 'hidden',
+  const style = {
+    width,
+    scrollSnapAlign: scrollSnap ? 'start' : null,
   };
 
-  const innerStyle = {
+  return <div style={style}>{children}</div>;
+};
+
+const HScrollInner = props => {
+  const { itemWidth, gap, showScrollbar, scrollSnap, children } = props;
+
+  const style = {
     display: 'flex',
     overflowX: 'scroll',
     WebkitOverflowScrolling: 'touch',
@@ -18,24 +24,39 @@ const HScroll = props => {
     scrollSnapType: scrollSnap ? 'x mandatory' : null,
   };
 
-  const halfGap = gap || gap === 0 ? gap : defaultGap;
-
-  const childWrapperStyle = {
-    scrollSnapAlign: scrollSnap ? 'start' : null,
-    paddingLeft: halfGap,
-    paddingRight: halfGap,
-  };
+  const itemWrapperWidth = itemWidth + gap;
 
   const wrappedChildren = children.map((child, index) => (
-    <div key={index} style={childWrapperStyle}>
+    <ItemWrapper key={index} width={itemWrapperWidth} scrollSnap={scrollSnap}>
       {child}
-    </div>
+    </ItemWrapper>
   ));
 
+  return <div style={style}>{wrappedChildren}</div>;
+};
+
+const HScroll = props => {
+  const { showScrollbar, scrollSnap, itemWidth, gap, children } = props;
+
+  const style = {
+    overflowY: showScrollbar ? null : 'hidden',
+  };
+
   return (
-    <div style={outerStyle}>
-      <div style={innerStyle}>{wrappedChildren}</div>
-    </div>
+    <ResizeDetector handleWidth>
+      {width => (
+        <div style={style}>
+          <HScrollInner
+            showScrollbar={showScrollbar}
+            scrollSnap={scrollSnap}
+            itemWidth={itemWidth}
+            gap={gap}
+          >
+            {children}
+          </HScrollInner>
+        </div>
+      )}
+    </ResizeDetector>
   );
 };
 
