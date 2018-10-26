@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import HScroll from './HScroll';
+import ResizeDetector from 'react-resize-detector';
 
 const cardHeight = 100;
 const cardWidth = 150;
@@ -20,15 +21,52 @@ class App extends Component {
     return (
       <div className="App">
         <h1>vanilla</h1>
-        <HScroll height={cardHeight} itemWidth={cardWidth}>{cards}</HScroll>
+        <ResizeDetector handleWidth>
+          {width => (
+            <HScroll width={width} height={cardHeight} itemWidth={cardWidth}>
+              {cards}
+            </HScroll>
+          )}
+        </ResizeDetector>
         <h1>showScrollbar</h1>
-        <HScroll height={cardHeight} itemWidth={cardWidth} showScrollbar>{cards}</HScroll>
+        <ResizeDetector handleWidth>
+          {width => (
+            <HScroll
+              width={width}
+              height={cardHeight}
+              itemWidth={cardWidth}
+              showScrollbar
+            >
+              {cards}
+            </HScroll>
+          )}
+        </ResizeDetector>
         <h1>scrollSnap</h1>
-        <HScroll height={cardHeight} itemWidth={cardWidth} scrollSnap>{cards}</HScroll>
+        <ResizeDetector handleWidth>
+          {width => (
+            <HScroll
+              width={width}
+              height={cardHeight}
+              itemWidth={cardWidth}
+              scrollSnap
+            >
+              {cards}
+            </HScroll>
+          )}
+        </ResizeDetector>
         <h1>gap=0</h1>
-        <HScroll height={cardHeight} itemWidth={cardWidth} gap={0}>{cards}</HScroll>
-        <h1>gap=20</h1>
-        <HScroll height={cardHeight} itemWidth={cardWidth} gap={20}>{cards}</HScroll>
+        <ResizeDetector handleWidth>
+          {width => (
+            <HScroll
+              width={width}
+              height={cardHeight}
+              itemWidth={cardWidth}
+              gap={0}
+            >
+              {cards}
+            </HScroll>
+          )}
+        </ResizeDetector>
       </div>
     );
   }

@@ -1,11 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import ResizeDetector from 'react-resize-detector';
 
-const WrappedItem = props => {
-  const { offset, width, height, scrollSnap, children } = props;
-
+const WrappedItem = ({ offset, width, height, scrollSnap, children }) => {
   const style = {
     position: 'absolute',
     left: offset,
@@ -18,80 +15,86 @@ const WrappedItem = props => {
 };
 
 type Props = {
-  itemWidth: number,
+  width: number,
   height: number,
+  itemWidth: number,
   gap: number,
   showScrollbar: boolean,
   scrollSnap: boolean,
   children: React.Node[],
 };
 
+const defaultProps = {
+  gap: 10,
+  showScrollbar: false,
+  scrollSnap: false,
+  children: [],
+};
+
 const HScroll = (props: Props) => {
   const {
-    itemWidth,
+    width,
     height,
-    gap = 10,
+    itemWidth,
+    gap,
     showScrollbar,
     scrollSnap,
     children,
   } = props;
+
+  // If width detection fails, return an empty placeholder div
+  if (isNaN(width)) return <div style={{ height }} />;
+
+  const shortWidth = width - gap * 3;
+  const itemsPerPage = Math.floor((shortWidth * 1.0) / (itemWidth + gap));
+  const spaceLeft = shortWidth - itemsPerPage * (itemWidth + gap);
+  const grownGap = (spaceLeft * 1.0) / (itemsPerPage + 3) + gap;
+  const itemStart = grownGap * 2.0;
+  const itemSpacing = itemWidth + grownGap;
+  const scrollBackWidth = itemSpacing * children.length + grownGap * 3;
+
+  const outerStyle = {
+    height,
+    overflowY: showScrollbar ? null : 'hidden',
+  };
+
+  const innerStyle = {
+    height,
+    position: 'relative',
+    overflowX: 'scroll',
+    WebkitOverflowScrolling: 'touch',
+    paddingBottom: showScrollbar ? null : 20,
+    marginBottom: showScrollbar ? null : -20,
+    scrollSnapType: scrollSnap ? 'x mandatory' : null,
+    scrollPaddingLeft: scrollSnap ? itemStart : null,
+  };
+
+  const scrollBackStyle = {
+    height,
+    width: scrollBackWidth,
+  };
+
+  const wrappedItems = children.map((child, index) => (
+    <WrappedItem
+      key={index}
+      offset={itemStart + itemSpacing * index}
+      width={itemWidth}
+      height={height}
+      scrollSnap={scrollSnap}
+    >
+      {child}
+    </WrappedItem>
+  ));
+
   return (
-    <ResizeDetector handleWidth>
-      {width => {
-        // If width detection fails, return an empty placeholder div
-        if (isNaN(width)) return <div style={{ height }} />;
-
-        const shortWidth = width - gap * 3;
-        const itemsPerPage = Math.floor((shortWidth * 1.0) / (itemWidth + gap));
-        const spaceLeft = shortWidth - itemsPerPage * (itemWidth + gap);
-        const grownGap = (spaceLeft * 1.0) / (itemsPerPage + 3) + gap;
-        const itemStart = grownGap * 2.0;
-        const itemSpacing = itemWidth + grownGap;
-        const scrollBackWidth = itemSpacing * children.length + grownGap * 3;
-
-        const outerStyle = {
-          height,
-          overflowY: showScrollbar ? null : 'hidden',
-        };
-
-        const innerStyle = {
-          height,
-          position: 'relative',
-          overflowX: 'scroll',
-          WebkitOverflowScrolling: 'touch',
-          paddingBottom: showScrollbar ? null : 20,
-          marginBottom: showScrollbar ? null : -20,
-          scrollSnapType: scrollSnap ? 'x mandatory' : null,
-          scrollPaddingLeft: scrollSnap ? itemStart : null,
-        };
-
-        const scrollBackStyle = {
-          height,
-          width: scrollBackWidth,
-        };
-
-        const wrappedItems = children.map((child, index) => (
-          <WrappedItem
-            key={index}
-            offset={itemStart + itemSpacing * index}
-            width={itemWidth}
-            height={height}
-            scrollSnap={scrollSnap}
-          >
-            {child}
-          </WrappedItem>
-        ));
-
-        return (
-          <div style={outerStyle}>
-            <div style={innerStyle}>
-              <div style={scrollBackStyle}>{wrappedItems}</div>
-            </div>
-          </div>
-        );
-      }}
-    </ResizeDetector>
+    <div style={outerStyle}>
+      <div style={innerStyle}>
+        <div style={scrollBackStyle}>{wrappedItems}</div>
+      </div>
+    </div>
   );
 };
+
+HScroll.defaultProps = defaultProps;
 
 export default HScroll;
