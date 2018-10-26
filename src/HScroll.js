@@ -47,6 +47,7 @@ const HScroll = (props: Props) => {
         const grownGap = (spaceLeft * 1.0) / (itemsPerPage + 3) + gap;
         const itemStart = grownGap * 2.0;
         const itemSpacing = itemWidth + grownGap;
+        const scrollBackWidth = itemSpacing * children.length + grownGap * 3;
 
         const outerStyle = {
           height,
@@ -64,6 +65,11 @@ const HScroll = (props: Props) => {
           scrollPaddingLeft: scrollSnap ? itemStart : null,
         };
 
+        const scrollBackStyle = {
+          height,
+          width: scrollBackWidth,
+        };
+
         const wrappedItems = children.map((child, index) => (
           <WrappedItem
             key={index}
@@ -78,7 +84,9 @@ const HScroll = (props: Props) => {
 
         return (
           <div style={outerStyle}>
-            <div style={innerStyle}>{wrappedItems}</div>
+            <div style={innerStyle}>
+              <div style={scrollBackStyle}>{wrappedItems}</div>
+            </div>
           </div>
         );
       }}
