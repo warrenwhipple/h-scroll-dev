@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 
+const scrollbarHideLength = 20;
+
 const WrappedItem = ({ offset, width, height, scrollSnap, children }) => {
   const style = {
     position: 'absolute',
@@ -42,7 +44,7 @@ const HScroll = (props: Props) => {
     children,
   } = props;
 
-  // If width detection fails, return an empty placeholder div
+  // Check broken inputs
   if (isNaN(width)) return <div style={{ height }} />;
 
   const shortWidth = width - gap * 3;
@@ -59,12 +61,10 @@ const HScroll = (props: Props) => {
   };
 
   const innerStyle = {
-    height,
+    height: showScrollbar ? height : height + scrollbarHideLength,
     position: 'relative',
     overflowX: 'scroll',
     WebkitOverflowScrolling: 'touch',
-    paddingBottom: showScrollbar ? null : 20,
-    marginBottom: showScrollbar ? null : -20,
     scrollSnapType: scrollSnap ? 'x mandatory' : null,
     scrollPaddingLeft: scrollSnap ? itemStart : null,
   };
