@@ -62,7 +62,6 @@ const HScroll = (props: Props) => {
 
   const innerStyle = {
     height: showScrollbar ? height : height + scrollbarHideLength,
-    position: 'relative',
     overflowX: 'scroll',
     WebkitOverflowScrolling: 'touch',
     scrollSnapType: scrollSnap ? 'x mandatory' : null,
@@ -72,6 +71,7 @@ const HScroll = (props: Props) => {
   const scrollBackStyle = {
     height,
     width: scrollBackWidth,
+    position: 'relative',
   };
 
   const wrappedItems = children.map((child, index) => (
