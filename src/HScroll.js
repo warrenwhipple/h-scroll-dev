@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import ResizeDetector from 'react-resize-detector';
 
@@ -29,9 +31,9 @@ const HScrollInner = props => {
   if (isNaN(width)) return null;
 
   const shortWidth = width - gap * 3;
-  const itemsPerPage = Math.floor(shortWidth * 1.0 / (itemWidth + gap));
+  const itemsPerPage = Math.floor((shortWidth * 1.0) / (itemWidth + gap));
   const spaceLeft = shortWidth - itemsPerPage * (itemWidth + gap);
-  const grownGap = spaceLeft * 1.0 / (itemsPerPage + 3) + gap;
+  const grownGap = (spaceLeft * 1.0) / (itemsPerPage + 3) + gap;
   const itemStart = grownGap * 2.0;
   const itemSpacing = itemWidth + grownGap;
 
@@ -51,6 +53,7 @@ const HScrollInner = props => {
       key={index}
       offset={itemStart + itemSpacing * index}
       width={itemWidth}
+      height={height}
       scrollSnap={scrollSnap}
     >
       {child}
@@ -75,7 +78,7 @@ const HScrollOuter = props => {
   );
 };
 
-const HScroll = props => (
+const HScroll = (props: any) => (
   <ResizeDetector handleWidth>
     {width => <HScrollOuter width={width} {...props} />}
   </ResizeDetector>
