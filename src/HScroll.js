@@ -94,7 +94,7 @@ const HScroll = (props: Props) => {
   }
 
   const outerStyle = {
-    newHeight,
+    height: newHeight,
     overflowY: showScrollbar ? null : 'hidden',
   };
 
