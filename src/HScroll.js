@@ -21,15 +21,21 @@ type Props = {
   height: number,
   itemWidth: number,
   gap: number,
+  growItem: number,
+  growGap: number,
+  growPeek: number,
   leftPeek: number,
-  rightPeek: ?number,
+  rightPeek: number,
   showScrollbar: boolean,
   scrollSnap: boolean,
   children: React.Node[],
 };
 
 const defaultProps = {
-  gap: 0,
+  gap: 10,
+  growItem: 1,
+  growGap: 1,
+  growPeek: 1,
   leftPeek: 0,
   rightPeek: 10,
   showScrollbar: false,
@@ -43,6 +49,9 @@ const HScroll = (props: Props) => {
     height,
     itemWidth,
     gap,
+    growItem,
+    growGap,
+    growPeek,
     leftPeek,
     rightPeek,
     showScrollbar,
@@ -50,35 +59,47 @@ const HScroll = (props: Props) => {
     children,
   } = props;
 
-  // Check broken inputs
+  // If width is not a number return placeholder div
+  // (Autosizing can init with width=NaN)
   if (isNaN(width)) return <div style={{ height }} />;
 
-  let itemStart, itemSpacing, scrollBackWidth;
+  let newItemWidth, newHeight, itemStart, itemSpacing, scrollBackWidth;
+  let didFit = false;
 
-  if (rightPeek == null) {
-    // Do not dynamically fit
+  if (growItem !== 0 || growGap !== 0 || growPeek !== 0) {
+    const fit = width - gap - leftPeek - rightPeek;
+    const itemsPerPage = Math.floor(fit / (itemWidth + gap));
+    if (itemsPerPage >= 1) {
+      const grow = fit - itemsPerPage * (itemWidth + gap);
+      const itemK = itemWidth * itemsPerPage * growItem;
+      const gapK = gap * (itemsPerPage + 1) * growGap;
+      const peekK = (leftPeek + rightPeek) * growPeek;
+      const growK = (grow * 1.0) / (itemK + gapK + peekK);
+      newItemWidth = itemWidth + itemWidth * growItem * growK;
+      newHeight = height + height * growItem * growK;
+      const newGap = gap + gap * growGap * growK;
+      const newLeftPeek = leftPeek + leftPeek * growPeek * growK;
+      itemStart = newLeftPeek + newGap;
+      itemSpacing = newItemWidth + newGap;
+      scrollBackWidth = itemStart * 2 + itemSpacing * children.length - newGap;
+      didFit = true;
+    }
+  }
+
+  if (!didFit) {
     itemStart = leftPeek + gap;
     itemSpacing = itemWidth + gap;
-    scrollBackWidth = itemStart * 2 + (itemWidth + gap) * children.length - gap;
-  } else {
-    const fitWidth = width - leftPeek - rightPeek;
-    const itemsPerPage = Math.floor(
-      ((fitWidth - gap) * 1.0) / (itemWidth + gap)
-    );
-    const spaceRemaining = fitWidth - itemsPerPage * (itemWidth + gap) - gap;
-    const newGap = (spaceRemaining * 1.0) / (itemsPerPage + 1);
-    itemStart = leftPeek + newGap;
-    itemSpacing = itemWidth + newGap;
-    scrollBackWidth = itemStart * 2 + itemSpacing * children.length - newGap;
+    scrollBackWidth = itemStart * 2 + itemSpacing * children.length - gap;
+    newHeight = height;
   }
 
   const outerStyle = {
-    height,
+    newHeight,
     overflowY: showScrollbar ? null : 'hidden',
   };
 
   const innerStyle = {
-    height: showScrollbar ? height : height + scrollbarHideLength,
+    height: showScrollbar ? newHeight : newHeight + scrollbarHideLength,
     overflowX: 'scroll',
     WebkitOverflowScrolling: 'touch',
     scrollSnapType: scrollSnap ? 'x mandatory' : null,
@@ -86,7 +107,7 @@ const HScroll = (props: Props) => {
   };
 
   const scrollBackStyle = {
-    height,
+    height: newHeight,
     width: scrollBackWidth,
     position: 'relative',
   };
@@ -95,8 +116,8 @@ const HScroll = (props: Props) => {
     <WrappedItem
       key={index}
       offset={itemStart + itemSpacing * index}
-      width={itemWidth}
-      height={height}
+      width={newItemWidth}
+      height={newHeight}
       scrollSnap={scrollSnap}
     >
       {child}

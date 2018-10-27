@@ -6,11 +6,9 @@ import ResizeDetector from 'react-resize-detector';
 const cardHeight = 100;
 const cardWidth = 150;
 
-const cardStyle = { width: cardWidth, height: cardHeight, flexShrink: 0 };
-
 const cards = [...Array(20).keys()].map(key => {
   return (
-    <div key={key} className="card" style={cardStyle}>
+    <div key={key} className="card" style={{ backgroundColor: 'red' }}>
       {key}
     </div>
   );
@@ -56,14 +54,15 @@ class App extends Component {
             </HScroll>
           )}
         </ResizeDetector>
-        <h1>gap=0</h1>
+        <h1>gap=10 rightPeek=20</h1>
         <ResizeDetector handleWidth>
           {width => (
             <HScroll
               width={width}
               height={cardHeight}
               itemWidth={cardWidth}
-              gap={0}
+              gap={10}
+              rightPeek={20}
             >
               {cards}
             </HScroll>
