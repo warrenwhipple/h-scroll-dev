@@ -8,7 +8,13 @@ const cardWidth = 150;
 
 const cards = [...Array(20).keys()].map(key => {
   return (
-    <div key={key} className="card" style={{ backgroundColor: 'red' }}>
+    <div
+      key={key}
+      className="card"
+      style={{
+        backgroundColor: `hsl(${(key * 160) % 360}, 25%, 25%)`,
+      }}
+    >
       {key}
     </div>
   );
