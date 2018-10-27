@@ -21,13 +21,17 @@ type Props = {
   height: number,
   itemWidth: number,
   gap: number,
+  leftPeek: number,
+  rightPeek: number,
   showScrollbar: boolean,
   scrollSnap: boolean,
   children: React.Node[],
 };
 
 const defaultProps = {
-  gap: 10,
+  gap: 0,
+  leftPeek: 0,
+  rightPeek: 10,
   showScrollbar: false,
   scrollSnap: false,
   children: [],
@@ -39,6 +43,8 @@ const HScroll = (props: Props) => {
     height,
     itemWidth,
     gap,
+    leftPeek,
+    rightPeek,
     showScrollbar,
     scrollSnap,
     children,
@@ -47,13 +53,14 @@ const HScroll = (props: Props) => {
   // Check broken inputs
   if (isNaN(width)) return <div style={{ height }} />;
 
-  const shortWidth = width - gap * 3;
-  const itemsPerPage = Math.floor((shortWidth * 1.0) / (itemWidth + gap));
-  const spaceLeft = shortWidth - itemsPerPage * (itemWidth + gap);
-  const grownGap = (spaceLeft * 1.0) / (itemsPerPage + 3) + gap;
-  const itemStart = grownGap * 2.0;
-  const itemSpacing = itemWidth + grownGap;
-  const scrollBackWidth = itemSpacing * children.length + grownGap * 3;
+  const fitWidth = width - leftPeek - rightPeek;
+  const itemsPerPage = Math.floor(((fitWidth - gap) * 1.0) / (itemWidth + gap));
+  const spaceRemaining = fitWidth - itemsPerPage * (itemWidth + gap) - gap;
+  const newGap = (spaceRemaining * 1.0) / (itemsPerPage + 1);
+  const itemStart = leftPeek + newGap;
+  const itemSpacing = itemWidth + newGap;
+  const scrollBackWidth =
+    itemStart * 2 + itemSpacing * children.length - newGap;
 
   const outerStyle = {
     height,

@@ -41,7 +41,7 @@ class App extends Component {
             </HScroll>
           )}
         </ResizeDetector>
-        <h1>scrollSnap</h1>
+        <h1>scrollSnap leftPeek=20 rightPeek=20</h1>
         <ResizeDetector handleWidth>
           {width => (
             <HScroll
@@ -49,6 +49,8 @@ class App extends Component {
               height={cardHeight}
               itemWidth={cardWidth}
               scrollSnap
+              leftPeek={20}
+              rightPeek={20}
             >
               {cards}
             </HScroll>
