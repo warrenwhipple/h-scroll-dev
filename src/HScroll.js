@@ -22,7 +22,7 @@ type Props = {
   itemWidth: number,
   gap: number,
   leftPeek: number,
-  rightPeek: number,
+  rightPeek: ?number,
   showScrollbar: boolean,
   scrollSnap: boolean,
   children: React.Node[],
@@ -53,14 +53,24 @@ const HScroll = (props: Props) => {
   // Check broken inputs
   if (isNaN(width)) return <div style={{ height }} />;
 
-  const fitWidth = width - leftPeek - rightPeek;
-  const itemsPerPage = Math.floor(((fitWidth - gap) * 1.0) / (itemWidth + gap));
-  const spaceRemaining = fitWidth - itemsPerPage * (itemWidth + gap) - gap;
-  const newGap = (spaceRemaining * 1.0) / (itemsPerPage + 1);
-  const itemStart = leftPeek + newGap;
-  const itemSpacing = itemWidth + newGap;
-  const scrollBackWidth =
-    itemStart * 2 + itemSpacing * children.length - newGap;
+  let itemStart, itemSpacing, scrollBackWidth;
+
+  if (rightPeek == null) {
+    // Do not dynamically fit
+    itemStart = leftPeek + gap;
+    itemSpacing = itemWidth + gap;
+    scrollBackWidth = itemStart * 2 + (itemWidth + gap) * children.length - gap;
+  } else {
+    const fitWidth = width - leftPeek - rightPeek;
+    const itemsPerPage = Math.floor(
+      ((fitWidth - gap) * 1.0) / (itemWidth + gap)
+    );
+    const spaceRemaining = fitWidth - itemsPerPage * (itemWidth + gap) - gap;
+    const newGap = (spaceRemaining * 1.0) / (itemsPerPage + 1);
+    itemStart = leftPeek + newGap;
+    itemSpacing = itemWidth + newGap;
+    scrollBackWidth = itemStart * 2 + itemSpacing * children.length - newGap;
+  }
 
   const outerStyle = {
     height,
