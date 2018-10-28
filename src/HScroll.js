@@ -28,6 +28,7 @@ type Props = {
   rightPeek: number,
   showScrollbar: boolean,
   scrollSnap: boolean,
+  overscroll: string,
   children: React.Node[],
 };
 
@@ -40,6 +41,7 @@ const defaultProps = {
   rightPeek: 20,
   showScrollbar: false,
   scrollSnap: false,
+  overscroll: 'contain',
   children: [],
 };
 
@@ -56,6 +58,7 @@ const HScroll = (props: Props) => {
     rightPeek,
     showScrollbar,
     scrollSnap,
+    overscroll,
     children,
   } = props;
 
@@ -104,6 +107,7 @@ const HScroll = (props: Props) => {
     height: showScrollbar ? newHeight : newHeight + scrollbarHideLength,
     overflowX: 'scroll',
     WebkitOverflowScrolling: 'touch',
+    overscrollBehaviorX: overscroll,
     scrollSnapType: scrollSnap ? 'x mandatory' : null,
     scrollPaddingLeft: scrollSnap ? itemStart : null,
   };
