@@ -12,7 +12,7 @@ const cards = [...Array(20).keys()].map(key => {
       key={key}
       className="card"
       style={{
-        backgroundColor: `hsl(${(key * 160) % 360}, 25%, 25%)`,
+        backgroundColor: `hsl(${(key * 150) % 360}, 25%, 25%)`,
       }}
     >
       {key}
@@ -45,7 +45,7 @@ class App extends Component {
             </HScroll>
           )}
         </ResizeDetector>
-        <h1>scrollSnap leftPeek=20 rightPeek=20</h1>
+        <h1>scrollSnap leftPeek=40 rightPeek=40</h1>
         <ResizeDetector handleWidth>
           {width => (
             <HScroll
@@ -53,14 +53,14 @@ class App extends Component {
               height={cardHeight}
               itemWidth={cardWidth}
               scrollSnap
-              leftPeek={20}
-              rightPeek={20}
+              leftPeek={40}
+              rightPeek={40}
             >
               {cards}
             </HScroll>
           )}
         </ResizeDetector>
-        <h1>gap=10 rightPeek=20</h1>
+        <h1>gap=10 growItem=0 growGap=1</h1>
         <ResizeDetector handleWidth>
           {width => (
             <HScroll
@@ -68,7 +68,23 @@ class App extends Component {
               height={cardHeight}
               itemWidth={cardWidth}
               gap={10}
-              rightPeek={20}
+              growItem={0}
+              growGap={1}
+            >
+              {cards}
+            </HScroll>
+          )}
+        </ResizeDetector>
+        <h1>gap=10 leftPeek=10 rightPeek=10</h1>
+        <ResizeDetector handleWidth>
+          {width => (
+            <HScroll
+              width={width}
+              height={cardHeight}
+              itemWidth={cardWidth}
+              gap={10}
+              leftPeek={10}
+              rightPeek={10}
             >
               {cards}
             </HScroll>

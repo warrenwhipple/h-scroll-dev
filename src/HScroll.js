@@ -32,12 +32,12 @@ type Props = {
 };
 
 const defaultProps = {
-  gap: 10,
+  gap: 0,
   growItem: 1,
-  growGap: 1,
-  growPeek: 1,
+  growGap: 0,
+  growPeek: 0,
   leftPeek: 0,
-  rightPeek: 10,
+  rightPeek: 20,
   showScrollbar: false,
   scrollSnap: false,
   children: [],
@@ -75,13 +75,15 @@ const HScroll = (props: Props) => {
       const gapK = gap * (itemsPerPage + 1) * growGap;
       const peekK = (leftPeek + rightPeek) * growPeek;
       const growK = (grow * 1.0) / (itemK + gapK + peekK);
-      newItemWidth = itemWidth + itemWidth * growItem * growK;
-      newHeight = height + height * growItem * growK;
       const newGap = gap + gap * growGap * growK;
       const newLeftPeek = leftPeek + leftPeek * growPeek * growK;
-      itemStart = newLeftPeek + newGap;
-      itemSpacing = newItemWidth + newGap;
-      scrollBackWidth = itemStart * 2 + itemSpacing * children.length - newGap;
+      newItemWidth = Math.floor(itemWidth + itemWidth * growItem * growK);
+      newHeight = Math.floor(height + height * growItem * growK + 0.5);
+      itemStart = Math.floor(newLeftPeek + newGap + 0.5);
+      itemSpacing = Math.floor(newItemWidth + newGap + 0.5);
+      scrollBackWidth = Math.floor(
+        itemStart * 2 + itemSpacing * children.length - newGap + 0.5
+      );
       didFit = true;
     }
   }
