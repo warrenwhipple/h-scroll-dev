@@ -108,7 +108,7 @@ const HScroll = (props: Props) => {
     overflowX: 'scroll',
     WebkitOverflowScrolling: 'touch',
     overscrollBehaviorX: overscroll,
-    scrollSnapType: scrollSnap ? 'x mandatory' : null,
+    scrollSnapType: scrollSnap ? 'x proximity' : null,
     scrollPaddingLeft: scrollSnap ? itemStart : null,
   };
 
