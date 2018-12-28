@@ -7,12 +7,9 @@ import ResizeDetector from 'react-resize-detector';
 const cardHeight = 100;
 const cardWidth = 150;
 
-const Column = ({ index, style }) => (
-  <div style={style}>Column {index}</div>
-);
-
 const Card = ({ index, style }) => (
   <div
+    className="card"
     style={{
       backgroundColor: `hsl(${(index * 150) % 360}, 25%, 25%)`,
       ...style,
@@ -43,6 +40,15 @@ class App extends Component {
         <ResizeDetector handleWidth>
           {width => (
             <>
+              <h1>window</h1>
+              <HScrollWindow
+                height={cardHeight}
+                itemCount={1000}
+                itemWidth={cardWidth}
+                width={width}
+              >
+                {Card}
+              </HScrollWindow>
               <h1>vanilla</h1>
               <HScroll width={width} height={cardHeight} itemWidth={cardWidth}>
                 {cards}
@@ -89,15 +95,6 @@ class App extends Component {
               >
                 {cards}
               </HScroll>
-              <h1>React Window</h1>
-              <HScrollWindow
-                height={cardHeight}
-                itemCount={1000}
-                itemWidth={cardWidth}
-                width={width}
-              >
-                {Column}
-              </HScrollWindow>
             </>
           )}
         </ResizeDetector>

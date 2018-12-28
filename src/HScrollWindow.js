@@ -1,14 +1,14 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 import { FixedSizeList as List } from 'react-window';
 
 type Props = {
-  height: number,
+  children: Component,
+  height: number | string,
   itemCount: number,
-  itemWidth: number,
+  itemSize: number,
   width: number,
-  children: any,
 };
 
 const defaultProps = {};
