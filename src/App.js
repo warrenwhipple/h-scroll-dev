@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import HScroll from './HScroll';
-import HScrollWindow from './HScrollWindow';
 import ResizeDetector from 'react-resize-detector';
+import HScroll from './HScroll';
+import { FixedSizeList } from 'react-window';
+import withHiddenScrollbar from './withHiddenScrollbar';
 
 const cardHeight = 100;
 const cardWidth = 150;
@@ -11,8 +12,8 @@ const Card = ({ index, style }) => (
   <div
     className="card"
     style={{
-      backgroundColor: `hsl(${(index * 150) % 360}, 25%, 25%)`,
       ...style,
+      backgroundColor: `hsl(${(index * 150) % 360}, 25%, 25%)`,
     }}
   >
     {index}
@@ -33,6 +34,8 @@ const cards = [...Array(20).keys()].map(key => {
   );
 });
 
+const PeekWindow = withHiddenScrollbar(FixedSizeList);
+
 class App extends Component {
   render() {
     return (
@@ -41,14 +44,15 @@ class App extends Component {
           {width => (
             <>
               <h1>window</h1>
-              <HScrollWindow
+              <PeekWindow
+                direction="horizontal"
                 height={cardHeight}
                 itemCount={1000}
-                itemWidth={cardWidth}
-                width={width}
+                itemSize={cardWidth}
+                width={width ? width : 0}
               >
                 {Card}
-              </HScrollWindow>
+              </PeekWindow>
               <h1>vanilla</h1>
               <HScroll width={width} height={cardHeight} itemWidth={cardWidth}>
                 {cards}
